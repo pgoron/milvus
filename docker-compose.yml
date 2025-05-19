@@ -1,4 +1,4 @@
-version: '3.5'
+#version: '3.5'
 
 x-ccache: &ccache
   CCACHE_COMPILERCHECK: content
@@ -29,6 +29,7 @@ services:
       PULSAR_ADDRESS: ${PULSAR_ADDRESS}
       ETCD_ENDPOINTS: ${ETCD_ENDPOINTS}
       MINIO_ADDRESS: ${MINIO_ADDRESS}
+      HOME: /home/milvus
       CONAN_USER_HOME: /home/milvus
       AZURE_STORAGE_CONNECTION_STRING: ${AZURITE_CONNECTION_STRING}
       ENABLE_GCP_NATIVE: ${ENABLE_GCP_NATIVE}
@@ -38,6 +39,9 @@ services:
       - ${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-go-mod:/go/pkg/mod:delegated
       - ${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-vscode-extensions:/home/milvus/.vscode-server/extensions:delegated
       - ${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-conan:/home/milvus/.conan:delegated
+      - ${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-cargo-registry:/home/milvus/.cargo/registry:delegated
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
     working_dir: '/go/src/github.com/milvus-io/milvus'
     depends_on:
       - etcd

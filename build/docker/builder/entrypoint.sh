@@ -30,6 +30,10 @@ if [ -f "/etc/profile.d/llvm-toolset-11.sh" ]; then
   source "/etc/profile.d/llvm-toolset-11.sh"
 fi
 
+if [ -f "/opt/rh/gcc-toolset-12/enable" ]; then
+  source "/opt/rh/gcc-toolset-12/enable"
+fi
+
 # Exit immediately for non zero status
 set -e
 

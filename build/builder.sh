@@ -37,13 +37,15 @@ mkdir -p "${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-ccache"
 mkdir -p "${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-go-mod"
 mkdir -p "${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-vscode-extensions"
 mkdir -p "${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-conan"
+mkdir -p "${DOCKER_VOLUME_DIRECTORY:-.docker}/${IMAGE_ARCH}-${OS_NAME}-cargo-registry"
 chmod -R 777 "${DOCKER_VOLUME_DIRECTORY:-.docker}"
 
-$DOCKER_COMPOSE_COMMAND pull builder
+# criteo: build builder on the fly locally as we don't push build image in registry
+# $DOCKER_COMPOSE_COMMAND pull builder
 if [[ "${CHECK_BUILDER:-}" == "1" ]]; then
     $DOCKER_COMPOSE_COMMAND build builder
 fi
 
-$DOCKER_COMPOSE_COMMAND run --no-deps --rm builder "$@"
+$DOCKER_COMPOSE_COMMAND run --user $(id -u):$(id -g) --no-deps --rm builder "$@"
 
 popd
